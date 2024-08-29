@@ -25,11 +25,62 @@ const resolvers = {
     getQuestions: () => questions,
   },
   Mutation: {
-    submitAnswers: (parent: any, { answers }: { answers: string[] }) => {
+    submitAnswers: async (_: any, { answers }: { answers: { questionId: string; answer?: string | string[]; file?: File }[] }) => {
       console.log('Received answers:', answers);
-      return 'Answers submitted successfully!';
+      
+      // Validate answers
+      for (const { questionId, answer, file } of answers) {
+        const question = questions.find(q => q.id === questionId);
+        if (!question) {
+          throw new Error(`Question with id ${questionId} not found`);
+        }
+        
+        if (question.required && (
+          (answer === undefined && file === undefined) || 
+          answer === '' || 
+          (Array.isArray(answer) && answer.length === 0)
+        )) {
+          throw new Error(`Question "${question.question}" is required`);
+        }
+        
+        if (question.type === 'email' && answer !== undefined) {
+          const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+          if (!emailRegex.test(answer as string)) {
+            throw new Error(`Invalid email format for question "${question.question}"`);
+          }
+        }
+
+        if (question.type === 'fileupload' && file === undefined) {
+          throw new Error(`File upload is required for question "${question.question}"`);
+        }
+      }
+
+      // Process answers (e.g., save to database)
+      try {
+        // Simulating database operation with a delay
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        console.log('Answers processed successfully:');
+        answers.forEach(({ questionId, answer, file }) => {
+          const question = questions.find(q => q.id === questionId);
+          if (question) {
+            console.log(`Question: ${question.question}`);
+            if (file) {
+              console.log(`File: ${file.name}`);
+              console.log(`File size: ${file.size}`);
+            } else {
+              console.log(`Answer: ${typeof answer === 'object' ? JSON.stringify(answer) : answer}`);
+            }
+          }
+        });
+        
+        return true;
+      } catch (error) {
+        console.error('Error processing answers:', error);
+        throw new Error('Failed to submit answers. Please try again.');
+      }
     },
-  },
-};
+  }
+};  
 
 export default resolvers;

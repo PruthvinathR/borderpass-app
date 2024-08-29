@@ -13,8 +13,16 @@ const typeDefs = gql`
     getQuestions: [Question!]!
   }
 
+  scalar Upload
+
+  input AnswerInput {
+    questionId: ID!
+    answer: [String!]
+    file: Upload
+  }
+
   type Mutation {
-    submitAnswers(answers: [String!]!): String
+    submitAnswers(answers: [AnswerInput!]!): Boolean!
   }
 `;
 

@@ -1,23 +1,14 @@
 'use client'
 
 import React, { useState } from "react";
-import { gql, useQuery } from "@apollo/client";
+import { gql, useQuery, useMutation } from "@apollo/client";
 import QuestionnaireCard from "./components/QuestionnaireCard";
 import QuestionnaireNavigation from "./components/QuestionnaireNavigation";
 import { CircularProgress, LinearProgress, Typography } from "@mui/material";
 import Question from "./components/Question";
+import { GET_QUESTIONS } from "../lib/graphql/queries/questionsQuery";
+import { SUBMIT_ANSWERS } from "../lib/graphql/mutations/questionsMutation";
 
-const GET_QUESTIONS = gql`
-  query GetQuestions {
-    getQuestions {
-      id
-      question
-      type
-      options
-      required
-    }
-  }
-`;
 
 interface QuestionType {
   id: string;
@@ -35,6 +26,7 @@ const Questionnaire = () => {
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [submissionMessage, setSubmissionMessage] = useState<string | null>(null);
     const [showError, setShowError] = useState(false);
+    const [submitAnswers, { loading: submitLoading, error: submitError }] = useMutation(SUBMIT_ANSWERS);
 
     if (loading) return (
         <QuestionnaireCard>
@@ -105,8 +97,22 @@ const Questionnaire = () => {
 
     const handleSubmit = (answers: Record<string, any>) => {
         console.log("Submitted Answers: ", answers);
-        setIsSubmitted(true);
-        setSubmissionMessage("Thank you for submitting your answers!");
+        const formattedAnswers = Object.entries(answers).map(([questionId, answer]) => ({
+          questionId,
+          answer: answer instanceof File ? undefined : answer,
+          file: answer instanceof File ? answer : undefined
+        }));
+        console.log("Formatted Answers: ", formattedAnswers);
+
+        submitAnswers({ variables: { answers: formattedAnswers } })
+          .then(() => {
+            setIsSubmitted(true);
+            setSubmissionMessage("Thank you for submitting your answers!");
+          })
+          .catch((error) => {
+            console.error("Error submitting answers:", error);
+            setSubmissionMessage("An error occurred while submitting your answers. Please try again.");
+          });
     };
 
     return (
