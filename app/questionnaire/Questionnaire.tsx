@@ -130,15 +130,16 @@ const Questionnaire = () => {
                             marginBottom: '20px',
                             backgroundColor: 'lightgrey',
                         }}
+                        
                     />
-                    <div style={{ border: showError ? '1px solid red' : 'none', padding: '0px' }}>
+                    <div style={{ border: showError ? '1px solid red' : 'none', paddingTop: '20px', overflow: 'auto', maxHeight: '60vh' }}>
                         <Question
                             question={questions[currentQuestionIndex]}
                             answer={answers[questions[currentQuestionIndex]?.id] || ''}
                             onAnswerChange={handleAnswerChange}
                         />
                     </div>
-                    <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '20px' }}>
+                    <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '20px', marginTop: '10px' }}>
                         <QuestionnaireNavigation
                             hasPrevious={currentQuestionIndex > 0}
                             hasNext={currentQuestionIndex < questions.length - 1}
