@@ -25,9 +25,7 @@ const resolvers = {
     getQuestions: () => questions,
   },
   Mutation: {
-    submitAnswers: async (_: any, { answers }: { answers: { questionId: string; answer?: string | string[]; file?: File }[] }) => {
-      console.log('Received answers:', answers);
-      
+    submitAnswers: async (_: any, { answers }: { answers: { questionId: string; answer?: string | string[]; file?: File }[] }) => {      
       // Validate answers
       for (const { questionId, answer, file } of answers) {
         const question = questions.find(q => q.id === questionId);
@@ -55,12 +53,11 @@ const resolvers = {
         }
       }
 
-      // Process answers (e.g., save to database)
+      // Save to database
       try {
         // Simulating database operation with a delay
         await new Promise(resolve => setTimeout(resolve, 1000));
         
-        console.log('Answers processed successfully:');
         answers.forEach(({ questionId, answer, file }) => {
           const question = questions.find(q => q.id === questionId);
           if (question) {

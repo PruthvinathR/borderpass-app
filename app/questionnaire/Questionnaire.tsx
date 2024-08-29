@@ -138,9 +138,6 @@ const Questionnaire = () => {
                             onAnswerChange={handleAnswerChange}
                         />
                     </div>
-                    {/* {reviewMode && (
-                        <ReviewAnswers answers={answers} questions={questions} />
-                    )} */}
                     <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '20px' }}>
                         <QuestionnaireNavigation
                             hasPrevious={currentQuestionIndex > 0}

@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Card, CardContent, LinearProgress } from '@mui/material';
+import { Card, CardContent } from '@mui/material';
 
 interface QuestionCardProps {
   children: React.ReactNode;

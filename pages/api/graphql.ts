@@ -12,7 +12,7 @@ const startServer = apolloServer.start();
 // API route handler
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await startServer;
-  await apolloServer.createHandler({ path: '/api/graphql' })(req, res);
+  await apolloServer.createHandler({ path: process.env.NEXT_PUBLIC_GRAPHQL_API_URL })(req, res);
 }
 
 export const config = {
