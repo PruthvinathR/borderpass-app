@@ -1,12 +1,12 @@
 import React from "react";
-import TextInput from "./QuestionTypes/TextInput";
-import TextArea from "./QuestionTypes/TextArea";
-import Dropdown from "./QuestionTypes/Dropdown";
-import RadioButtonGroup from "./QuestionTypes/RadioButtonGroup";
-import CheckboxGroup from "./QuestionTypes/CheckboxGroup";
-import DatePicker from "./QuestionTypes/DatePicker";
-import FileUpload from "./QuestionTypes/FileUpload";
-import EmailInput from "./QuestionTypes/EmailInput";
+import TextInput from "../../ui/TextInput";
+import TextArea from "../../ui/TextArea";
+import Dropdown from "../../ui/Dropdown";
+import RadioButtonGroup from "../../ui/RadioButtonGroup";
+import CheckboxGroup from "../../ui/CheckboxGroup";
+import DatePicker from "../../ui/DatePicker";
+import FileUpload from "../../ui/FileUpload";
+import EmailInput from "../../ui/EmailInput";
 
 interface Question {
   id: string;

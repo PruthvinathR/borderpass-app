@@ -2,10 +2,10 @@
 
 import React, { useState } from "react";
 import { gql, useQuery } from "@apollo/client";
-import QuestionnaireCard from "./QuestionnaireCard";
-import QuestionnaireNavigation from "./QuestionnaireNavigation";
+import QuestionnaireCard from "./components/QuestionnaireCard";
+import QuestionnaireNavigation from "./components/QuestionnaireNavigation";
 import { CircularProgress, LinearProgress, Typography } from "@mui/material";
-import Question from "./Question";
+import Question from "./components/Question";
 
 const GET_QUESTIONS = gql`
   query GetQuestions {
