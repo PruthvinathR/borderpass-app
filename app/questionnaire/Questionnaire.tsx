@@ -132,12 +132,14 @@ const Questionnaire = () => {
                         }}
                         
                     />
-                    <div style={{ border: showError ? '1px solid red' : 'none', paddingTop: '20px', overflow: 'auto', maxHeight: '60vh' }}>
-                        <Question
-                            question={questions[currentQuestionIndex]}
-                            answer={answers[questions[currentQuestionIndex]?.id] || ''}
-                            onAnswerChange={handleAnswerChange}
-                        />
+                    <div style={{ paddingTop: '20px', overflow: 'auto', maxHeight: '60vh' }}>
+                        <div style = {{border: showError ? '1px solid red' : 'none', padding: '5px', borderRadius: '5px'}}>
+                            <Question
+                                question={questions[currentQuestionIndex]}
+                                answer={answers[questions[currentQuestionIndex]?.id] || ''}
+                                onAnswerChange={handleAnswerChange}
+                            />
+                        </div>
                     </div>
                     <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '20px', marginTop: '10px' }}>
                         <QuestionnaireNavigation
