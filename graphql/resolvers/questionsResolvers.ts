@@ -12,7 +12,7 @@ const questions: Question[] = [
   { id: "1", question: "Please enter your name", type: "text", required: true },
   { id: "2", question: "Email address", type: "email", required: true },
   { id: "3", question: "Tell us about yourself", type: "textarea", required: false },
-  { id: "4", question: "What is your date of birth?", type: "datepicker", required: true },
+  { id: "4", question: "When is the earliest date you would be available to start?", type: "datepicker", required: true },
   { id: "5", question: "Select your favorite programming languages", type: "checkbox", options: ["JavaScript", "Python", "C", "java"], required: false },
   { id: "6", question: "Choose your gender", type: "radiobutton", options: ["Male", "Female", "Non-binary", "Prefer not to say"], required: true },
   { id: "7", question: "Upload your resume", type: "fileupload", required: true },
