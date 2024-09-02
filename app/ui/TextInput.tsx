@@ -1,14 +1,10 @@
 import React from "react";
 import { TextField } from "@mui/material";
+import { BaseUIProps } from "./BaseUIProps";
 
-interface TextInputProps {
-  label: string;
-  value: string;
-  required?: boolean;
-  onChange: (value: string) => void;
-}
+interface TextInputProps extends BaseUIProps{}
 
-const TextInput = ({ label, value, required, onChange }: TextInputProps) => (
+const TextInput = ({ label, value, required, options, onChange }: TextInputProps) => (
   <TextField
     fullWidth
     label={label}

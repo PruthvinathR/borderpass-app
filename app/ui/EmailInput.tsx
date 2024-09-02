@@ -1,15 +1,12 @@
 
 import React from "react";
 import { TextField } from "@mui/material";
+import { BaseUIProps } from "./BaseUIProps";
 
-interface EmailInputProps {
-  label: string;
-  value: string;
-  required?: boolean;
-  onChange: (value: string) => void;
-}
+interface EmailInputProps extends BaseUIProps {}
 
-const EmailInput = ({ label, value, required, onChange }: EmailInputProps) => (
+
+const EmailInput = ({ label, value, required, options, onChange }: EmailInputProps) => (
   <TextField
     fullWidth
     type="email"

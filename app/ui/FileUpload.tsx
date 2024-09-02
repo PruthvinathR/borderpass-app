@@ -1,14 +1,13 @@
 import React from "react";
 import { Button, Typography } from "@mui/material";
+import { BaseUIProps } from "./BaseUIProps";
 
-interface FileUploadProps {
-  label: string;
+interface FileUploadProps extends Omit<BaseUIProps, 'value' | 'onChange'> {
   value: File | null;
-  required?: boolean;
   onChange: (file: File | null) => void;
 }
 
-const FileUpload = ({ label, value, required, onChange }: FileUploadProps) => {
+const FileUpload = ({ label, value, required, options, onChange }: FileUploadProps) => {
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files ? event.target.files[0] : null;
     onChange(file);

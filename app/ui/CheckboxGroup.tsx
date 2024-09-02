@@ -1,11 +1,9 @@
 import React from "react";
 import { FormControl, FormControlLabel, FormGroup, FormLabel, Checkbox } from "@mui/material";
+import { BaseUIProps } from "./BaseUIProps";
 
-interface CheckboxGroupProps {
-  label: string;
-  options: string[];
+interface CheckboxGroupProps extends Omit<BaseUIProps, 'value' | 'onChange'> {
   value: string[];
-  required?: boolean;
   onChange: (value: string[]) => void;
 }
 

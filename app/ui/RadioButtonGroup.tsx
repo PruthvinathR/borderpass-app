@@ -1,13 +1,8 @@
 import React from "react";
 import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from "@mui/material";
+import { BaseUIProps } from "./BaseUIProps";
 
-interface RadioButtonGroupProps {
-  label: string;
-  options: string[];
-  value: string;
-  required?: boolean;
-  onChange: (value: string) => void;
-}
+interface RadioButtonGroupProps extends BaseUIProps {}
 
 const RadioButtonGroup = ({ label, options, value, required, onChange }: RadioButtonGroupProps) => (
   <FormControl component="fieldset" required={required}>

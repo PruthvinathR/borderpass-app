@@ -1,12 +1,8 @@
 import React from "react";
 import { TextField } from "@mui/material";
+import { BaseUIProps } from "./BaseUIProps";
 
-interface TextAreaProps {
-  label: string;
-  value: string;
-  required?: boolean;
-  onChange: (value: string) => void;
-}
+interface TextAreaProps extends BaseUIProps {}
 
 const TextArea = ({ label, value, required, onChange }: TextAreaProps) => (
   <TextField

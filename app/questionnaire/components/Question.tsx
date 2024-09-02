@@ -21,92 +21,41 @@ interface QuestionProps {
     answer: any;
     onAnswerChange: (id: string, answer: any) => void;
 }
-  
+
 
 const Question = ({ question, answer, onAnswerChange }: QuestionProps) => {
     const renderQuestionComponent = () => {
-        switch (question.type) {
-          case "text":
-            return (
-              <TextInput
-                label={question.question}
-                value={answer || ""}
-                required={question.required}
-                onChange={(value) => onAnswerChange(question.id, value)}
-              />
-            );
-          case "email":
-            return (
-              <EmailInput
-                label={question.question}
-                value={answer || ""}
-                required={question.required}
-                onChange={(value) => onAnswerChange(question.id, value)}
-              />
-            );
-          case "textarea":
-            return (
-              <TextArea
-                label={question.question}
-                value={answer || ""}
-                required={question.required}
-                onChange={(value) => onAnswerChange(question.id, value)}
-              />
-            );
-          case "dropdown":
-            return (
-              <Dropdown
-                label={question.question}
-                value={answer || ""}
-                options={question.options || []}
-                required={question.required}
-                onChange={(value) => onAnswerChange(question.id, value)}
-              />
-            );
-          case "radiobutton":
-            return (
-              <RadioButtonGroup
-                label={question.question}
-                value={answer || ""}
-                options={question.options || []}
-                required={question.required}
-                onChange={(value) => onAnswerChange(question.id, value)}
-              />
-            );
-          case "checkbox":
-            return (
-              <CheckboxGroup
-                label={question.question}
-                value={answer || []}
-                options={question.options || []}
-                required={question.required}
-                onChange={(value) => onAnswerChange(question.id, value)}
-              />
-            );
-          case "datepicker":
-            return (
-              <DatePicker
-                label={question.question}
-                value={answer || ""}
-                required={question.required}
-                onChange={(value) => onAnswerChange(question.id, value)}
-              />
-            );
-          case "fileupload":
-            return (
-              <FileUpload
-                label={question.question}
-                required={question.required}
-                onChange={(value) => onAnswerChange(question.id, value)}
-                value={answer || null}
-              />
-            );
-          default:
-            return null;
+        const commonProps = {
+          label: question.question,
+          value: answer || "",
+          required: question.required,
+          options: question.options || [],
+          onChange: (value: any) => onAnswerChange(question.id, value)
+        };
+          
+        const componentMap = {
+          text: TextInput,
+          email: EmailInput,
+          textarea: TextArea,
+          dropdown: Dropdown,
+          radiobutton: RadioButtonGroup,
+          checkbox: CheckboxGroup,
+          datepicker: DatePicker,
+          fileupload: FileUpload
+        };
+
+        const Component = componentMap[question.type as keyof typeof componentMap];
+        
+        if (!Component) {
+          return null;
         }
-      };
+        
+        return <Component {...commonProps} />;
+
+
+    };
     
-      return <div>{renderQuestionComponent()}</div>;
+    return <div>{renderQuestionComponent()}</div>;
 }
 
 export default Question;

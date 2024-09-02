@@ -1,13 +1,8 @@
 import React from "react";
 import { FormControl, InputLabel, Select, MenuItem } from "@mui/material";
+import { BaseUIProps } from "./BaseUIProps";
 
-interface DropdownProps {
-  label: string;
-  value: string;
-  options: string[];
-  required?: boolean;
-  onChange: (value: string) => void;
-}
+interface DropdownProps extends BaseUIProps{}
 
 const Dropdown = ({ label, value, options, required, onChange }: DropdownProps) => (
   <FormControl fullWidth required={required}>

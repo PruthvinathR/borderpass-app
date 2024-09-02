@@ -1,14 +1,10 @@
 import React from "react";
 import { TextField } from "@mui/material";
+import { BaseUIProps } from "./BaseUIProps";
 
-interface DatePickerProps {
-  label: string;
-  value: string;
-  required?: boolean;
-  onChange: (value: string) => void;
-}
+interface DatePickerProps extends BaseUIProps {}
 
-const DatePicker = ({ label, value, required, onChange }: DatePickerProps) => (
+const DatePicker = ({ label, value, required, options, onChange }: DatePickerProps) => (
   <TextField
     fullWidth
     type="date"
