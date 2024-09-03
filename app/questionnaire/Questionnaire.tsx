@@ -160,7 +160,8 @@ const Questionnaire = () => {
                                     }
                                 }
                             }}
-                            buttonText={
+                            backButtonText="← Back"
+                            nextButtonText={
                                 currentQuestionIndex < questions.length - 1 ? "Next →" : "Submit"
                             }
                         />

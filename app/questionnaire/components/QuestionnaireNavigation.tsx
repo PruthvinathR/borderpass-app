@@ -4,19 +4,20 @@ import { Button } from "@mui/material";
 interface QuestionNavigationProps {
     hasPrevious: boolean;
     hasNext: boolean;
-    buttonText: string;
+    backButtonText: string;
+    nextButtonText: string;
     onPrevious: () => void;
     onNext: () => void;
   }
 
-const QuestionnaireNavigation = ({ hasPrevious, hasNext, buttonText, onPrevious, onNext }: QuestionNavigationProps) => {
+const QuestionnaireNavigation = ({ hasPrevious, hasNext, backButtonText, nextButtonText, onPrevious, onNext }: QuestionNavigationProps) => {
   return (
     <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
         <Button onClick={onPrevious} disabled={!hasPrevious} style={{ marginRight: '10px' }}>
-        ← Back
+        {backButtonText}
         </Button>
         <Button onClick={onNext}>
-        {buttonText}
+        {nextButtonText}
         </Button>
   </div>
   )
