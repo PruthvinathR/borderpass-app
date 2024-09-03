@@ -20,26 +20,29 @@ interface QuestionType {
 
 
 const Questionnaire = () => {
-    const { loading, error, data } = useQuery(GET_QUESTIONS);
+    const { loading: questionsLoading, error, data } = useQuery(GET_QUESTIONS);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [answers, setAnswers] = useState<Record<string, any>>({});
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [submissionMessage, setSubmissionMessage] = useState<string | null>(null);
     const [showError, setShowError] = useState(false);
-    const [submitAnswers, { loading: submitLoading, error: submitError }] = useMutation(SUBMIT_ANSWERS);
+    const [submitAnswers, { loading: isSubmitting, error: submitError }] = useMutation(SUBMIT_ANSWERS);
+    
 
-    if (loading) return (
+    if (questionsLoading || isSubmitting) {
+        const message = questionsLoading ? "Loading questions..." : "Submitting answers...";
+        return (
+            <QuestionnaireCard>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+                    <Typography variant="h6" align="center">{message}</Typography>
+                    <CircularProgress style={{ marginTop: '20px' }} />
+                </div>
+            </QuestionnaireCard>
+        );
+    }
+    if (error || submitError) return (
         <QuestionnaireCard>
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
-            <Typography variant="h6" align="center">Loading...</Typography>
-            <CircularProgress style={{ marginTop: '20px' }} />
-          </div>
-          
-        </QuestionnaireCard>
-    );
-    if (error) return (
-        <QuestionnaireCard>
-            <Typography variant="h6" align="center">Error: {error.message}</Typography>
+            <Typography variant="h6" align="center">Error: {error ? error.message : submitError?.message}</Typography>
         </QuestionnaireCard>
     );
 
@@ -95,7 +98,7 @@ const Questionnaire = () => {
         }
     };
 
-    const handleSubmit = (answers: Record<string, any>) => {
+    const handleSubmit = async (answers: Record<string, any>) => {
         console.log("Submitted Answers: ", answers);
         const formattedAnswers = Object.entries(answers).map(([questionId, answer]) => ({
           questionId,
@@ -104,15 +107,14 @@ const Questionnaire = () => {
         }));
         console.log("Formatted Answers: ", formattedAnswers);
 
-        submitAnswers({ variables: { answers: formattedAnswers } })
-          .then(() => {
-            setIsSubmitted(true);
-            setSubmissionMessage("Thank you for submitting your answers!");
-          })
-          .catch((error) => {
-            console.error("Error submitting answers:", error);
-            setSubmissionMessage("An error occurred while submitting your answers. Please try again.");
-          });
+        try {
+          await submitAnswers({ variables: { answers: formattedAnswers } });
+          setIsSubmitted(true);
+          setSubmissionMessage("Thank you for submitting your answers!");
+        } catch (error) {
+          console.error("Error submitting answers:", error);
+          setSubmissionMessage("An error occurred while submitting your answers. Please try again.");
+        }
     };
 
     return (

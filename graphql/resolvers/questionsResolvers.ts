@@ -81,3 +81,6 @@ const resolvers = {
 };  
 
 export default resolvers;
+
+// We can use merge resolvers to merge the resolvers from different sources
+// const mergedResolvers = mergeResolvers([questionsResolvers, otherResolvers]);
