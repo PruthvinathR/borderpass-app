@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 import { useQuery, useMutation } from "@apollo/client";
-import { CircularProgress, Divider, LinearProgress, List, ListItem, ListItemText, Paper, Typography } from "@mui/material";
+import { CircularProgress, Divider, IconButton, LinearProgress, List, ListItem, ListItemText, Paper, Typography } from "@mui/material";
+import EditIcon from '@mui/icons-material/Edit';
 
 import QuestionnaireCard from "./components/QuestionnaireCard";
 import QuestionnaireNavigation from "./components/QuestionnaireNavigation";
@@ -154,6 +155,15 @@ const Questionnaire = () => {
         setReviewData(reviewData);
     };
 
+    const handleEdit = (questionId: string) => {
+        setIsReviewing(false);
+        if(questionId === questions[questions.length - 1].id)
+        {
+            setReviewButton(true);
+        }
+        setCurrentQuestionIndex( () => questions.findIndex(q => q.id === questionId));
+    };
+
     const renderReviewAnswers = (reviewData: { question: string; answer: AnswerType }[]): React.ReactElement => {
         const formatAnswer = (answer: AnswerType) => {
             if (typeof answer === 'object' && answer !== null) {
@@ -189,6 +199,9 @@ const Questionnaire = () => {
                                         </Typography>
                                     }
                                 />
+                                <IconButton edge="end" aria-label="edit" onClick={() => handleEdit(questions.find(q => q.question === item.question)?.id || '')}>
+                                    <EditIcon fontSize="small" />
+                                </IconButton>
                             </ListItem>
                             {index < reviewData.length - 1 && <Divider component="li" />}
                         </React.Fragment>
