@@ -1,11 +1,13 @@
 'use client'
 
 import React, { useState, useEffect } from "react";
-import { gql, useQuery, useMutation } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
+import { CircularProgress, Divider, LinearProgress, List, ListItem, ListItemText, Paper, Typography } from "@mui/material";
+
 import QuestionnaireCard from "./components/QuestionnaireCard";
 import QuestionnaireNavigation from "./components/QuestionnaireNavigation";
-import { CircularProgress, Divider, LinearProgress, List, ListItem, ListItemText, Paper, Typography } from "@mui/material";
 import Question from "./components/Question";
+
 import { GET_QUESTIONS } from "../lib/graphql/queries/questionsQuery";
 import { SUBMIT_ANSWERS } from "../lib/graphql/mutations/questionsMutation";
 
@@ -20,7 +22,6 @@ interface QuestionType {
 
 
 const Questionnaire = () => {
-    const { loading: questionsLoading, error, data } = useQuery(GET_QUESTIONS);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [answers, setAnswers] = useState<Record<string, any>>({});
     const [isReviewing, setIsReviewing] = useState(false);
@@ -29,6 +30,7 @@ const Questionnaire = () => {
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [submissionMessage, setSubmissionMessage] = useState<string | null>(null);
     const [showError, setShowError] = useState(false);
+    const { loading: questionsLoading, error, data } = useQuery(GET_QUESTIONS);
     const [submitAnswers, { loading: isSubmitting, error: submitError }] = useMutation(SUBMIT_ANSWERS);
     
 
