@@ -26,7 +26,7 @@ const Questionnaire = () => {
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [answers, setAnswers] = useState<Record<string, AnswerType>>({});
     const [isReviewing, setIsReviewing] = useState(false);
-    const [review, setReview] = useState(false);
+    const [reviewButton, setReviewButton] = useState(false);
     const [reviewData, setReviewData] = useState<{ question: string; answer: AnswerType }[]>([]);
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [submissionMessage, setSubmissionMessage] = useState<string | null>(null);
@@ -37,10 +37,10 @@ const Questionnaire = () => {
 
     useEffect(() => {
         if ( data && currentQuestionIndex === questions.length - 1) {
-            setReview(true);
+            setReviewButton(true);
         }
         else {
-            setReview(false);
+            setReviewButton(false);
         }
     }, [currentQuestionIndex]);
 
@@ -111,7 +111,7 @@ const Questionnaire = () => {
         setShowError(false);
         if (isReviewing) {
             setIsReviewing(false);
-            setReview(true);
+            setReviewButton(true);
         } else if (currentQuestionIndex > 0) {
             setCurrentQuestionIndex((prevIndex) => prevIndex - 1);
         }
@@ -120,11 +120,14 @@ const Questionnaire = () => {
     const handleSubmit = async (answers: Record<string, AnswerType>) => {
         setIsReviewing(false);
         console.log("Submitted Answers: ", answers);
-        const formattedAnswers = Object.entries(answers).map(([questionId, answer]) => ({
-          questionId,
-          answer: answer instanceof File ? undefined : answer,
-          file: answer instanceof File ? answer : undefined
-        }));
+        const formattedAnswers = questions.map((question) => {
+            const answer = answers[question.id];
+            return {
+                questionId: question.id,
+                answer: answer instanceof File ? undefined : answer,
+                file: answer instanceof File ? answer : undefined
+            };
+        });
         console.log("Formatted Answers: ", formattedAnswers);
 
         try {
@@ -139,7 +142,7 @@ const Questionnaire = () => {
 
     const handleReview = (answers: Record<string, AnswerType>) => {
         setIsReviewing(true);
-        setReview(false);
+        setReviewButton(false);
         
         // Create an array to store all questions and answers
         const reviewData = questions.map((question) => ({
@@ -166,8 +169,10 @@ const Questionnaire = () => {
         };
 
         return (
-            <Paper elevation={1} sx={{ maxHeight: '50vh', overflow: 'auto', padding: 2, marginBottom: '20px' }}>
+            <>
                 <Typography variant="h6" gutterBottom>Review Your Answers</Typography>
+                <Paper elevation={1} sx={{ maxHeight: '50vh', overflow: 'auto', padding: 2, marginBottom: '20px' }}>
+                    
                 <List>
                     {reviewData.map((item, index) => (
                         <React.Fragment key={index}>
@@ -188,8 +193,9 @@ const Questionnaire = () => {
                             {index < reviewData.length - 1 && <Divider component="li" />}
                         </React.Fragment>
                     ))}
-                </List>
-            </Paper>
+                    </List>
+                </Paper>
+            </>
         );
     };
 
@@ -236,7 +242,7 @@ const Questionnaire = () => {
                                     setShowError(false);
                                     if (currentQuestionIndex < questions.length - 1) {
                                         handleNext();
-                                    } else if(review) {
+                                    } else if(reviewButton) {
                                         handleReview(answers);
                                     } else {
                                         handleSubmit(answers);
@@ -245,7 +251,7 @@ const Questionnaire = () => {
                             }}
                             backButtonText="← Back"
                             nextButtonText={
-                                currentQuestionIndex < questions.length - 1 ? "Next →" : (review ? "Review" : "Submit")
+                                currentQuestionIndex < questions.length - 1 ? "Next →" : (reviewButton ? "Review" : "Submit")
                             }
                         />
                     </div>
