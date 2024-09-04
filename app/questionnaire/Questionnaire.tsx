@@ -22,11 +22,12 @@ interface QuestionType {
 
 
 const Questionnaire = () => {
+    type AnswerType = string | string[] | File | null;
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-    const [answers, setAnswers] = useState<Record<string, any>>({});
+    const [answers, setAnswers] = useState<Record<string, AnswerType>>({});
     const [isReviewing, setIsReviewing] = useState(false);
     const [review, setReview] = useState(false);
-    const [reviewData, setReviewData] = useState<{ question: string; answer: string }[]>([]);
+    const [reviewData, setReviewData] = useState<{ question: string; answer: AnswerType }[]>([]);
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [submissionMessage, setSubmissionMessage] = useState<string | null>(null);
     const [showError, setShowError] = useState(false);
@@ -63,7 +64,7 @@ const Questionnaire = () => {
 
     const questions: QuestionType[] = data.getQuestions;
 
-    const handleAnswerChange = (questionId: string, value: any) => {
+    const handleAnswerChange = (questionId: string, value: AnswerType) => {
         setAnswers({ ...answers, [questionId]: value });
         const currentQuestion = questions.find(q => q.id === questionId);
         if (currentQuestion && currentQuestion.required) {
@@ -86,7 +87,7 @@ const Questionnaire = () => {
         
         if (currentQuestion.type === "email") {
           const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-          if (!emailRegex.test(answer)) {
+          if (!emailRegex.test(answer as string)) {
             return false;
           }
         }
@@ -116,7 +117,7 @@ const Questionnaire = () => {
         }
     };
 
-    const handleSubmit = async (answers: Record<string, any>) => {
+    const handleSubmit = async (answers: Record<string, AnswerType>) => {
         setIsReviewing(false);
         console.log("Submitted Answers: ", answers);
         const formattedAnswers = Object.entries(answers).map(([questionId, answer]) => ({
@@ -136,7 +137,7 @@ const Questionnaire = () => {
         }
     };
 
-    const handleReview = (answers: Record<string, any>) => {
+    const handleReview = (answers: Record<string, AnswerType>) => {
         setIsReviewing(true);
         setReview(false);
         
@@ -144,14 +145,14 @@ const Questionnaire = () => {
         const reviewData = questions.map((question) => ({
             question: question.question,
             answer: answers[question.id] || 'Not answered'
-        }));
+        })) as { question: string, answer: AnswerType }[];
         console.log("Review Data: ", reviewData);
         // Set the review data in the state
         setReviewData(reviewData);
     };
 
-    const renderReviewAnswers = (reviewData: { question: string; answer: string | string[] | File | null }[]): React.ReactElement => {
-        const formatAnswer = (answer: string | string[] | File | null) => {
+    const renderReviewAnswers = (reviewData: { question: string; answer: AnswerType }[]): React.ReactElement => {
+        const formatAnswer = (answer: AnswerType) => {
             if (typeof answer === 'object' && answer !== null) {
                 if (Array.isArray(answer)) {
                     return answer.join(', ');
